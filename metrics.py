@@ -40,8 +40,9 @@ def remove_newlines(list_):
         temp.append(element.strip())
     return temp
 
+#not used
 def artist_name(string):
-    """Extracts the artist's name from 'path_object'. Returns String."""
+    """Extracts the artist's name from 'string'. Returns String."""
     elements = Path(string).parts
     name_element = elements[-1]
     match = re.match(".*[_$]", name_element)    #matches up to the underscore
@@ -55,8 +56,22 @@ def artist_name(string):
     name = remove_final_underscore(match[0])
     return name
 
-def song_name(x):
-    return name
+def artist_and_song_names(string):
+    """Extracts the artist and song name from the string. Returns Strings."""
+    elements = Path(string).parts
+    name_elements = elements[-1]            
+    if name_elements.count("_") == 1:
+        names = name_elements.split("_")    #split into artist name and song name
+    else:
+        raise Exception("More or less than one underscore")
+    song_name = remove_txt_suffix(names[1])
+    return names[0], song_name
+
+def remove_txt_suffix(string):
+    """Removes the final '.txt' in the file name. Returns String."""
+    temp = list(string)
+    song_name = "".join(temp[:-4])     #remove ".txt"
+    return song_name
 
 def link(x):
     return link
@@ -132,11 +147,8 @@ def word_len(list_):
                     min_len = length
     return min_len, max_len
 
-            
-
-
-#    artistname      = text
-#    songname        = text
+##    artistname      = text
+##    songname        = text
 #    link            = text, url
 #    genre           = ?
 ##    wordcount       = integer
@@ -147,7 +159,6 @@ def word_len(list_):
 ##    minwordlen      = integer
 #    punctfreq       = a list of tuples (punc, freq)
 #    wordfreq        = a list of tuples (word, freq)
-
 
 #other possible metrics:
 # punctuation per line
@@ -171,16 +182,13 @@ def word_len(list_):
 # average lenght of artist names
 #
 
-
-
-
 def get_metrics(song_path):
-    """Gather all metrics into one list. Returns List.
+    """Get all the metrics from a song. Returns Dictionary.
         type(song_path) == str
     """
     with open(song_path, "r") as song:
         songtext = song.readlines()
-        artistname = artist_name(song_path)
+        artistname, songname = artist_and_song_names(song_path)
         wordcount = word_count(songtext)
         linecount = line_count(songtext)
         avgwordlen = average_word_len(songtext, wordcount)
@@ -188,14 +196,13 @@ def get_metrics(song_path):
         minwordlen, maxwordlen = word_len(songtext)
         
         metrics = {}
-        metrics["artistname"] = artistname 
-        metrics["wordcount"] = wordcount
-        metrics["linecount"] = linecount
-        metrics["avgwordlen"] = avgwordlen
-        metrics["avgwordsperline"] = avgwordsperline
-        metrics["minwordlen"] = minwordlen
-        metrics["maxwordlen"] = maxwordlen
-
-#        return [wordcount, linecount, avgwordlen, avgwordsperline, minwordlen, maxwordlen, artistname]
+        metrics["artistname"]       = artistname 
+        metrics["songname"]         = songname
+        metrics["wordcount"]        = wordcount
+        metrics["linecount"]        = linecount
+        metrics["avgwordlen"]       = avgwordlen
+        metrics["avgwordsperline"]  = avgwordsperline
+        metrics["minwordlen"]       = minwordlen
+        metrics["maxwordlen"]       = maxwordlen
 
         return metrics
