@@ -1,0 +1,242 @@
+Basic pattern: make CONNECTION, create CURSOR, EXECUTE commands
+What can SQL do?
+ - execute queries against a database
+ - retrieve data from a database
+ - insert records in a database
+ - update records in a database
+ - delete records from a database
+ - create new databases
+ - create new tables in a database
+ - create stored procedures in a database
+ - create views in a database
+ - set permissions on tables, procedures, and views
+
+FIELD == COLUMN
+RECORD == ROW
+
+Key commands;
+FROM -
+WHERE - 
+ORDER BY -
+ASC - 
+DESC - 
+SELECT - extracts data from a database
+SELECT TOP - 
+UPDATE - updates data in a database
+INSERT INTO - inserts new data into a database
+CREATE DATABASE - creates a new database
+CREATE TABLE - creates a new table
+CREATE INDEX - creates an index (search key)
+ALTER DATABASE - modifies a database
+ALTER TABLE - modifies a table
+DELETE - deletes data from a database
+DROP TABLE - deletes a table
+DROP INDEX - deletes an index
+
+Data type		Description
+- CHARACTER(n)		Character string. Fixed-length n
+- VARCHAR(n) or
+  CHARACTER VARYING(n)	Character string. Variable length. Maximum length n
+- BINARY(n)		Binary string. Fixed-length n
+- BOOLEAN		Stores TRUE or FALSE values
+- VARBINARY(n) or
+  BINARY VARYING(n)	Binary string. Variable length. Maximum length n
+- INTEGER(p)		Integer numerical (no decimal). Precision p
+- SMALLINT		Integer numerical (no decimal). Precision 5
+- INTEGER		Integer numerical (no decimal). Precision 10
+- BIGINT		Integer numerical (no decimal). Precision 19
+- DECIMAL(p,s)		Exact numerical, precision p, scale s. Example: 				decimal(5,2) is a number that has 3 digits before the 				decimal and 2 digits after the decimal
+- NUMERIC(p,s)		Exact numerical, precision p, scale s. (Same as DECIMAL)
+- FLOAT(p)		Approximate numerical, mantissa precision p. A floating 			number in base 10 exponential notation. The size argument 			for this type consists of a single number specifying the 			minimum precision
+- REAL			Approximate numerical, mantissa precision 7
+- FLOAT			Approximate numerical, mantissa precision 16
+- DOUBLE PRECISION	Approximate numerical, mantissa precision 16
+- DATE			Stores year, month, and day values
+- TIME			Stores hour, minute, and second values
+- TIMESTAMP		Stores year, month, day, hour, minute, and second values
+- INTERVAL		Composed of a number of integer fields, representing a 				period of time, depending on the type of interval
+- ARRAY			A set-length and ordered collection of elements
+- MULTISET		A variable-length and unordered collection of elements
+- XML			Stores XML data
+
+Basic ideas:
+# "select" (what) "from" (table)
+SELECT column1, column2, ... FROM table_name;
+SELECT * FROM table_name;
+SELECT CustomerName, City FROM Customers;
+
+# return only distict(different) values
+SELECT DISTINCT column1, column2, ... FROM table_name;
+SELECT DISTINCT Country FROM Customers;
+SELECT COUNT(DISTINCT Country) FROM Customers;
+
+# "where" is a filtering command
+SELECT column1, column2, ... FROM table_name WHERE condition;
+SELECT * FROM Customers WHERE Country='Mexico';
+SELECT * FROM Customers WHERE CustomerID=1;
+SELECT column1, column2, ... FROM table_name WHERE condition1 AND condition2 AND condition3 ...;
+SELECT column1, column2, ... FROM table_name WHERE condition1 OR condition2 OR condition3 ...;
+SELECT column1, column2, ... FROM table_name WHERE NOT condition;
+SELECT * FROM Customers WHERE Country='Germany' AND City='Berlin';
+SELECT * FROM Customers WHERE City='Berlin' OR City='München';
+SELECT * FROM Customers WHERE NOT Country='Germany';
+SELECT * FROM Customers WHERE Country='Germany' AND (City='Berlin' OR City='München');
+SELECT * FROM Customers WHERE NOT Country='Germany' AND NOT Country='USA';
+
+# "order by" with "asc" or "desc" ordering
+SELECT column1, column2, ... FROM table_name ORDER BY column1, column2, ... ASC|DESC;
+SELECT * FROM Customers ORDER BY Country;
+SELECT * FROM Customers ORDER BY Country DESC;
+SELECT * FROM Customers ORDER BY Country, CustomerName;
+SELECT * FROM Customers ORDER BY Country ASC, CustomerName DESC;
+
+# "insert into"
+# explicity name the fields to input data, or implicitly by order.
+# can specify which fields to input into.
+INSERT INTO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+INSERT INTO table_name VALUES (value1, value2, value3, ...);
+INSERT INTO Customers (CustomerName, ContactName, Address, City, PostalCode, Country) VALUES ('Cardinal', 'Tom B. Erichsen', 'Skagen 21', 'Stavanger', '4006', 'Norway');
+INSERT INTO Customers (CustomerName, City, Country) VALUES ('Cardinal', 'Stavanger', 'Norway');
+
+# testing for null
+SELECT column_names FROM table_name WHERE column_name IS NULL;
+SELECT column_names FROM table_name WHERE column_name IS NOT NULL;
+SELECT LastName, FirstName, Address FROM Persons WHERE Address IS NULL;
+SELECT LastName, FirstName, Address FROM Persons WHERE Address IS NOT NULL;
+
+# "update"
+# if you don't use the "where" clause, all records will be updated
+# can update a single entry with the "where" clause, or many
+UPDATE table_name SET column1 = value1, column2 = value2, ... WHERE condition;
+UPDATE Customers SET ContactName = 'Alfred Schmidt', City= 'Frankfurt' WHERE CustomerID = 1;
+UPDATE Customers SET ContactName='Juan' WHERE Country='Mexico';
+
+# "delete"
+# if you don't use the "where" clause, all records will be deleted
+DELETE FROM table_name WHERE condition;
+DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
+# delete all records, but preserve the table structure, attributes, indices
+DELETE FROM table_name;
+DELETE * FROM table_name;
+
+# "select top"
+# prevents returning too many entries from large databases
+SELECT TOP number|percent column_name(s) FROM table_name WHERE condition;   #sql server
+SELECT column_name(s) FROM table_name WHERE condition LIMIT number;         #mysql
+SELECT column_name(s) FROM table_name WHERE ROWNUM <= number;               #oracle
+SELECT TOP 3 * FROM Customers;
+SELECT * FROM Customers LIMIT 3;
+SELECT * FROM Customers WHERE ROWNUM <= 3;
+SELECT TOP 50 PERCENT * FROM Customers;
+SELECT TOP 3 * FROM Customers WHERE Country='Germany';
+SELECT * FROM Customers WHERE Country='Germany' LIMIT 3;
+SELECT * FROM Customers WHERE Country='Germany' AND ROWNUM <= 3;
+
+# "min" and "max"
+SELECT MIN(column_name) FROM table_name WHERE condition;
+SELECT MAX(column_name) FROM table_name WHERE condition;
+SELECT MIN(Price) AS SmallestPrice FROM Products;
+SELECT MAX(Price) AS LargestPrice FROM Products;
+
+# "count", "avg" and "sum"
+SELECT COUNT(column_name) FROM table_name WHERE condition;      #returns a count
+SELECT AVG(column_name) FROM table_name WHERE condition;        #returns an average
+SELECT SUM(column_name) FROM table_name WHERE condition;        #returns sum of an numeric field
+SELECT COUNT(ProductID) FROM Products;
+SELECT AVG(Price) FROM Products;
+SELECT SUM(Quantity) FROM OrderDetails;
+
+# "like"
+# % - The percent sign represents zero, one, or multiple characters
+# _ - The underscore represents a single character
+SELECT column1, column2, ... FROM table_name WHERE column LIKE pattern;
+SELECT * FROM Customers WHERE CustomerName LIKE 'a%';
+SELECT * FROM Customers WHERE CustomerName NOT LIKE 'a%';
+SELECT * FROM Customers WHERE City LIKE 'ber%';
+SELECT * FROM Customers WHERE City LIKE '%es%';
+SELECT * FROM Customers WHERE City LIKE '_erlin';       #any, erlin
+SELECT * FROM Customers WHERE City LIKE 'L_n_on';       #L, any, n, any, on
+SELECT * FROM Customers WHERE City LIKE '[bsp]%';       #starting with b, s or p
+SELECT * FROM Customers WHERE City LIKE '[a-c]%';       #starting with a, b or c
+SELECT * FROM Customers WHERE City LIKE '[!bsp]%';      #not starting with b, s or p
+SELECT * FROM Customers WHERE City NOT LIKE '[bsp]%';   #not starting with b, s or p
+ -  WHERE CustomerName LIKE 'a%'	Finds any values that start with "a"
+ -  WHERE CustomerName LIKE '%a'	Finds any values that end with "a"
+ -  WHERE CustomerName LIKE '%or%'	Finds any values that have "or" in any position
+ -  WHERE CustomerName LIKE '_r%'	Finds any values that have "r" in the second position
+ -  WHERE CustomerName LIKE 'a_%_%'	Finds any values that start with "a" and are at least 3 characters in length
+ -  WHERE ContactName LIKE 'a%o'	Finds any values that start with "a" and ends with "o"
+
+# "in" is a shorthand for multiple "or" conditions
+SELECT column_name(s) FROM table_name WHERE column_name IN (value1, value2, ...);
+SELECT column_name(s) FROM table_name WHERE column_name IN (SELECT STATEMENT);
+SELECT * FROM Customers WHERE Country IN ('Germany', 'France', 'UK');
+SELECT * FROM Customers WHERE Country NOT IN ('Germany', 'France', 'UK');
+SELECT * FROM Customers WHERE Country IN (SELECT Country FROM Suppliers);
+
+# "between" selects values within a range
+SELECT column_name(s) FROM table_name WHERE column_name BETWEEN value1 AND value2;
+SELECT * FROM Products WHERE Price BETWEEN 10 AND 20;
+SELECT * FROM Products WHERE Price NOT BETWEEN 10 AND 20;
+SELECT * FROM Products WHERE (Price BETWEEN 10 AND 20) AND NOT CategoryID IN (1,2,3);
+SELECT * FROM Products WHERE ProductName BETWEEN 'Carnarvon Tigers' AND 'Mozzarella di Giovanni' ORDER BY ProductName;
+SELECT * FROM Products WHERE ProductName NOT BETWEEN 'Carnarvon Tigers' AND 'Mozzarella di Giovanni' ORDER BY ProductName;
+# for using dates
+SELECT * FROM Orders WHERE OrderDate BETWEEN #07/04/1996# AND #07/09/1996#;
+
+#left off at aliases https://www.w3schools.com/sql/sql_alias.asp
+
+# Syntax points:
+ - single quotes around text values
+ - not case sensitive
+ - numeric fields have no quotes
+ - use parenthesis to form complex expressions 
+ - test for NULL with "is null" and "is not null" operators
+
+# "where" clause operators
+    =	Equal
+    <>	Not equal (some versions use !=)
+    >	Greater than
+    <	Less than
+    >=	Greater than or equal
+    <=	Less than or equal
+    BETWEEN	Between an inclusive range
+    LIKE	Search for a pattern
+    IN	To specify multiple possible values for a column
+    AND
+    OR
+    NOT
+
+import sqlite3
+conn = sqlite3.connect('example.db')        #create database connection
+c = conn.cursor()                           #communicate with a cursor
+
+# Create table
+c.execute('''CREATE TABLE stocks (date text, trans text, symbol text, qty real, price real)''')
+
+# Insert a row of data
+c.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
+
+# Save (commit) the changes
+conn.commit()
+conn.close()
+
+# Never do this -- insecure!
+symbol = 'RHAT'
+c.execute("SELECT * FROM stocks WHERE symbol = '%s'" % symbol)
+
+# Do this instead
+t = ('RHAT',)
+c.execute('SELECT * FROM stocks WHERE symbol=?', t)
+print(c.fetchone())
+
+# Larger example that inserts many records at a time
+purchases = [('2006-03-28', 'BUY', 'IBM', 1000, 45.00),
+             ('2006-04-05', 'BUY', 'MSFT', 1000, 72.00),
+             ('2006-04-06', 'SELL', 'IBM', 500, 53.00),
+            ]
+c.executemany('INSERT INTO stocks VALUES (?,?,?,?,?)', purchases)
+
+# cursor object can be used as an iterator in a loop,
+# to get a single line with the cursor's fetchone() method,
+# or to return a list of matching objects with the fetchall() method.

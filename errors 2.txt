@@ -1,0 +1,35 @@
+TUPLE INDEX OUT OF RANGE:
+
+"Akon": "https://www.lyrics.com/artist/Akon/535592"
+"Al Bowlly": "https://www.lyrics.com/artist/Al%20Bowlly/26221"
+"Alcione": "https://www.lyrics.com/artist/Alcione/3190"
+"Archie Lee": "https://www.lyrics.com/artist/Archie%20Lee/342955"
+
+  File "scrapesongs.py", line 54, in <module>
+    song = unquote(Path(link.get("href")).parts[4])     # song name
+IndexError: tuple index out of range
+
+
+
+
+WRITE MUST BE STRING NOT TAG:
+
+"Apache Indian": "https://www.lyrics.com/artist/Apache%20Indian/37084"
+"Asher D": "https://www.lyrics.com/artist/Asher%20D/733458"
+"B.G.": "https://www.lyrics.com/artist/B.G./215704"
+"Bastian": "https://www.lyrics.com/artist/Bastian/756941"
+
+Traceback (most recent call last):
+  File "scrapesongs.py", line 62, in <module>
+    song = unquote(Path(link.get("href")).parts[4])     # song name
+IndexError: tuple index out of range
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "scrapesongs.py", line 69, in <module>
+    save_error(link)
+  File "scrapesongs.py", line 38, in save_error
+    errors.write(link)
+TypeError: write() argument must be str, not Tag
+
