@@ -29,7 +29,7 @@ for each_song in songs:
 #          song_metrics["maxwordlen"])
 
 # user feedback
-    print("IN DATABASE ::", each_song.parts[-1])
+#    print("IN DATABASE ::", each_song.parts[-1])
 
 
 ###### check the unique word set using Merriam-Webster API

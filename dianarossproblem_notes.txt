@@ -1,7 +1,0 @@
-find -L files -type f -newer
-
-22:34:00
-
-
-need to compare what files where downloaded with what links exists in only_song_links.txt
-**somewhere around Diana Ross :34098

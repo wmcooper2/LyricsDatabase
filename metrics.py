@@ -2,7 +2,9 @@
 """Analyzes the song and extracts metrics for lyrics.db"""
 
 import re
+import string
 from pathlib import Path
+#from string import ascii_letters as alphabet
 from parselyrics import remove_punctuation as rmv_punct
 from parselyrics import file_to_list
 from parselyrics import separate_by_spaces
@@ -11,6 +13,8 @@ from parselyrics import remove_blank_elements as rmv_blnk_elmt
 from parselyrics import remove_newlines as rmv_nwln
 from parselyrics import remove_final_underscore as rmv_undrscr
 from parselyrics import remove_txt_suffix as rmv_sfx
+
+all_ascii = string.ascii_letters + string.digits + string.punctuation # + string.whitespace
 
 #not used
 def artist_name(string):
@@ -111,17 +115,26 @@ def word_len(list_):
                     min_len = length
     return min_len, max_len
 
-def character_counter(text_file):
+def ascii_counter(text_file):
     """Counts all the individual characters in 'text_file'. Returns Dictionary."""
-
-    pass
+    letter_dict = {}
+    for letter in all_ascii:
+        letter_dict[letter] = 0
+    for line in text_file.readlines():
+        for word in line.split():
+            for character in word:
+                if character in all_ascii:
+                    letter_dict[character] += 1
+    return letter_dict
 
 def get_metrics(song_path):
     """Get all the metrics from a song. Returns Dictionary.
         type(song_path) == str
     """
     with open(song_path, "r") as song:
-        characters = character_counts(song)
+#        ascii_chars = ascii_counter(song)           #count all the non-whitespace ascii characters
+#        for key, value in ascii_chars.items():
+#            print(key, value)
 
         song_list = file_to_list(song_path)         #split the file into lines
 
@@ -167,20 +180,17 @@ def get_metrics(song_path):
 # 1st - parse the lyrics (read file, break up lines and words, remove punctuation)
 # 2nd - gather the metrics on each song (read file again, count things, calculate averages)
 
-
-
-
+# for now, just use these metrics to start.
+# later, use the expand function in the database to add more fields then run those metrics on all the songs.
 ##    artistname      = text
 ##    songname        = text
 #    link            = text, url
-#    genre           = ?
 ##    wordcount       = integer
 ##    linecount       = integer
 ##    avgwordlen      = float, 4 digits
 ##    avglinelen      = float, 4 digits
 ##    maxwordlen      = integer
 ##    minwordlen      = integer
-#    punctfreq       = a list of tuples (punc, freq)
 #    wordfreq        = a list of tuples (word, freq)
 
 #other possible metrics:
@@ -204,12 +214,14 @@ def get_metrics(song_path):
 # words that are created by that artist
 # words that are slang
 # (some words are all caps and may need to be lowered; some proper nouns)
+# genre
+# weeks on hits chart
 
 
 #artist metrics
 # length of song name
 # length of artist name
 # average length of song names
-# average lenght of artist names
+# average length of artist names
 #
 
