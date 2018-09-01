@@ -42,11 +42,7 @@ def db_insert(db, data):
                  data["minwordlen"], 
                  data["maxwordlen"]))
 
-def db_save(db):    #unecessary
-    """Save the changes made to the database. Returns None."""
-    db.commit()
 
-def db_close(db):   #unecessary
-    """Close the connection to the database. Returns None."""
-    db.close()
+#connection.commit()
 
+#connection.close()
