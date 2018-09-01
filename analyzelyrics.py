@@ -5,7 +5,7 @@ from pathlib import Path
 from metrics import get_metrics
 from database import db_maketables, db_insert, db_connect
 
-lyrics_dir = "/Users/wandalcooper/Programming/Github/Lyrics_Database/testlyrics/"
+lyrics_dir = "./testlyrics/"
 db, connection = db_connect()
 try:
     db_maketables(db)

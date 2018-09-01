@@ -5,3 +5,6 @@ Steps for getting lyrics' metrics and inserting into database.
  - parses/tokenizes the song files with 'parselyrics.py'
  - calculates values with 'metrics.py'
  - finally, inserts data into the database
+
+2. use command line to browse database
+ - sqlite3 <database file>
