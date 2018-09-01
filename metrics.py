@@ -4,7 +4,6 @@
 import re
 import string
 from pathlib import Path
-#from string import ascii_letters as alphabet
 from parselyrics import remove_punctuation as rmv_punct
 from parselyrics import file_to_list
 from parselyrics import separate_by_spaces
@@ -174,7 +173,7 @@ def get_metrics(song_path):
         metrics["minwordlen"]       = minwordlen
         metrics["maxwordlen"]       = maxwordlen
 
-        return metrics
+        return metrics, set(song_words)
 
 # pass the file path to parselyrics.py, then to metrics.py. 
 # 1st - parse the lyrics (read file, break up lines and words, remove punctuation)

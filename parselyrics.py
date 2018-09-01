@@ -25,9 +25,9 @@ def separate_by_spaces(line):
 
 def remove_punctuation(word):
     """Removes punctuation from the word. Returns String.
-        Doesn't remove "'" and "-"
+        Doesn't remove "'"
     """
-    good_punctuation = ["'", "-"]
+    good_punctuation = ["'"]
     no_punct = []
     for character in word:
         if character in alphabet or character in good_punctuation:
@@ -71,3 +71,8 @@ def remove_txt_suffix(string):
     temp = list(string)
     song_name = "".join(temp[:-4])     #remove ".txt"
     return song_name
+
+#file_to_list()
+#remove_blank_elements()
+#separate_by_spaces()
+

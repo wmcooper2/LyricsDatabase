@@ -8,11 +8,11 @@ from pathlib import Path
 #import the database conection
 def db_connect():
     """Connect to the database. Returns Cursor, Connection."""
-    connection = sqlite3.connect("lyrics.db")
+    connection = sqlite3.connect("songs.db")
     db = connection.cursor()
     return db, connection
 
-def db_maketable(db):
+def db_maketables(db):
     """
     artistname      = text
     songname        = text
@@ -28,6 +28,7 @@ def db_maketable(db):
     wordfreq        = a list of tuples (word, freq)
     """
     db.execute("CREATE TABLE metrics (artistname text, songname text, wordcount smallint, linecount smallint, avgwordlen float(4), avglinelen float(4), maxwordlen smallint, minwordlen smallint)") 
+#    db.execute("CREATE TABLE lyrics (artistname text, songname text, uniquewords array)")
 
 def db_insert(db, data):
     """Insert all the metrics into the database. Returns None."""
